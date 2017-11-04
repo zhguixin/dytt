@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">电影天堂</string>
+    <string name="detail_info">详细信息>></string>
+    <string name="title_home">主页</string>
+    <string name="title_search">搜索</string>
+    <string name="title_about">关于</string>
+    <string name="title_activity_scrolling">电影详情</string>
+    <string name="action_settings">Settings</string>
+    <string name="error_info">请检查网络连接，获取最新电影信息</string>
+    <string name="more_info">加载更多...</string>
+    <string name="search_hint">请输入要搜索电影的关键字</string>
+    <string name="search_no_data">没有查询到相关搜索结果</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
