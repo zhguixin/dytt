@@ -230,6 +230,8 @@ public class SearchFragment extends Fragment {
         inflater.inflate(R.menu.search_menu, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) item.getActionView();
+        // 搜索框默认为展开
+        searchView.setIconifiedByDefault(false);
         searchView.setQueryHint("请输入要查询电影的关键字");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

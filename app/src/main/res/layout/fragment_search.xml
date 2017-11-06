@@ -14,6 +14,7 @@
         android:singleLine="true"
         android:textStyle="italic"
         android:imeOptions="actionSearch"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="50dp" />

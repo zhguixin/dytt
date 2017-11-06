@@ -1,19 +1,78 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="site.zhguixin.dytt.ui.MainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <FrameLayout
+        android:id="@+id/head_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/title_about" />
+        android:layout_height="170dp">
+        <site.zhguixin.dytt.ui.view.CircleImageView
+            android:id="@+id/head_img"
+            android:layout_gravity="center"
+            android:src="@drawable/head_img"
+            android:scaleType="centerCrop"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+    </FrameLayout>
 
-    <site.zhguixin.dytt.ui.view.WaveView
-        android:id="@+id/wave_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_below="@id/head_container"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout">
+        <ImageView
+            android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="1px" />
+        <LinearLayout
+            android:id="@+id/movie_info"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="30dp">
+            <TextView
+                android:text="数据来源："
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="电影天堂网站(http://www.dytt8.net/)"
+                android:textStyle="bold|italic"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/line2"
+            android:layout_below="@id/movie_info"
+            android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="1px" />
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/app_introuduce"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@id/line2"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:text="APP练手小项目，敬请支持" />
+        <ImageView
+            android:layout_below="@id/app_introuduce"
+            android:layout_width="match_parent"
+            android:background="@color/lineColor"
+            android:layout_height="1px" />
+
+    </RelativeLayout>
+
+
+    <!--<site.zhguixin.dytt.ui.view.WaveView-->
+        <!--android:id="@+id/wave_view"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
+
+</RelativeLayout>

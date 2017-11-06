@@ -2,7 +2,12 @@ package site.zhguixin.dytt.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
@@ -23,12 +28,16 @@ import site.zhguixin.dytt.entity.MovieBean;
 import site.zhguixin.dytt.entity.MovieInfo;
 
 /**
- * Created by 10200927 on 2017/10/23.
+ * Created by zhguixin on 2017/10/23.
  */
 
 public class Utils {
 
     private static final String TAG = "Utils";
+    // 图片缩放比例
+    private static final float BITMAP_SCALE = 0.5f;
+    // 图片模糊度
+    private static final float BLUR_RADIUS = 25f;
 
     public static void main(String[] args) {
 //        praseHtml(html);
@@ -105,5 +114,32 @@ public class Utils {
                 imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }
+    }
+
+    public static Bitmap blurBtimap(Context context, Bitmap originalBitmap) {
+        // 计算图片缩小后的长宽
+        int width = Math.round(originalBitmap.getWidth() * BITMAP_SCALE);
+        int height = Math.round(originalBitmap.getHeight() * BITMAP_SCALE);
+        // 将缩小后的图片做为预渲染的图片。
+        Bitmap inputBitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, false);
+        // 创建一张渲染后的输出图片。
+        Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
+        // 创建RenderScript内核对象
+        RenderScript rs = RenderScript.create(context);
+        // 创建一个模糊效果的RenderScript的工具对象
+        ScriptIntrinsicBlur blurScript = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+        // 由于RenderScript并没有使用VM来分配内存,所以需要使用Allocation类来创建和分配内存空间。
+        // 创建Allocation对象的时候其实内存是空的,需要使用copyTo()将数据填充进去。
+        Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap);
+        Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
+        // 设置渲染的模糊程度, 25f是最大模糊度
+        blurScript.setRadius(BLUR_RADIUS);
+        // 设置blurScript对象的输入内存
+        blurScript.setInput(tmpIn);
+        // 将输出数据保存到输出内存中
+        blurScript.forEach(tmpOut);
+        // 将数据填充到Allocation中
+        tmpOut.copyTo(outputBitmap);
+        return outputBitmap;
     }
 }

@@ -1,22 +1,30 @@
 package site.zhguixin.dytt.ui;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import site.zhguixin.dytt.R;
 import site.zhguixin.dytt.ui.view.WaveView;
+import site.zhguixin.dytt.utils.Utils;
 
 /**
  */
 public class AboutFragment extends Fragment {
 
+    private static final String TAG = "AboutFragment";
+    private Context mContext;
+    private FrameLayout mHeadContainer;
     private WaveView mWaveView;
+
     public AboutFragment() {
         // Required empty public constructor
     }
@@ -36,7 +44,16 @@ public class AboutFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mWaveView = view.findViewById(R.id.wave_view);
-        mWaveView.start();
+        mContext = getActivity();
+        mHeadContainer = view.findViewById(R.id.head_container);
+        init();
+//        mWaveView = view.findViewById(R.id.wave_view);
+//        mWaveView.start();
+    }
+
+    private void init(){
+        Bitmap original = BitmapFactory.decodeResource(getResources(), R.drawable.head_img);
+        Bitmap blurBitmap = Utils.blurBtimap(getActivity(),original);
+        mHeadContainer.setBackground(new BitmapDrawable(getResources(),blurBitmap));
     }
 }
