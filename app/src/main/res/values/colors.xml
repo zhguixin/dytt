@@ -6,4 +6,6 @@
     <color name="gray">#edeaea</color>
 
     <color name="lineColor">#cccccc</color>
+    <color name="lightBlack">#1e1e1e</color>
+    <color name="lightWhite">#fafafa</color>
 </resources>

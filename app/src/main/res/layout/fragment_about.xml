@@ -1,6 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="site.zhguixin.dytt.ui.MainFragment">
@@ -8,7 +9,7 @@
     <FrameLayout
         android:id="@+id/head_container"
         android:layout_width="match_parent"
-        android:layout_height="170dp">
+        android:layout_height="150dp">
         <site.zhguixin.dytt.ui.view.CircleImageView
             android:id="@+id/head_img"
             android:layout_gravity="center"
@@ -18,61 +19,41 @@
             android:layout_height="80dp" />
     </FrameLayout>
 
-    <RelativeLayout
-        android:layout_below="@id/head_container"
-        android:layout_marginTop="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/relativeLayout">
-        <ImageView
-            android:layout_width="match_parent"
-            android:background="@color/lineColor"
-            android:layout_height="1px" />
-        <LinearLayout
-            android:id="@+id/movie_info"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="30dp">
-            <TextView
-                android:text="数据来源："
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:text="电影天堂网站(http://www.dytt8.net/)"
-                android:textStyle="bold|italic"
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <ImageView
-            android:id="@+id/line2"
-            android:layout_below="@id/movie_info"
-            android:layout_width="match_parent"
-            android:background="@color/lineColor"
-            android:layout_height="1px" />
+    <View style="@style/bg_line"/>
+    <LinearLayout style="@style/single_layout" android:id="@+id/other_func">
+        <TextView style="@style/usertext" android:text="辅助功能"/>
+        <ImageView style="@style/img_arrow"/>
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/app_introuduce"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_below="@id/line2"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:text="APP练手小项目，敬请支持" />
-        <ImageView
-            android:layout_below="@id/app_introuduce"
-            android:layout_width="match_parent"
-            android:background="@color/lineColor"
-            android:layout_height="1px" />
+    <View style="@style/bg_line"/>
+    <LinearLayout style="@style/single_layout" android:id="@+id/clear_cache">
+        <TextView style="@style/usertext" android:text="清除缓存"/>
+        <TextView style="@style/textinfo" android:text="0.56M" />
+    </LinearLayout>
 
-    </RelativeLayout>
+    <View style="@style/bg_line"/>
+    <LinearLayout style="@style/single_layout" android:id="@+id/app_version">
+        <TextView style="@style/usertext" android:text="软件版本"/>
+        <TextView style="@style/textinfo" android:text="V1.0" />
+    </LinearLayout>
 
+    <View style="@style/bg_line"/>
+    <LinearLayout style="@style/single_layout">
+        <TextView style="@style/usertext" android:text="夜间模式"/>
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <View style="@style/bg_line"/>
+    <LinearLayout style="@style/single_layout" android:id="@+id/about_author">
+        <TextView style="@style/usertext" android:text="关于作者"/>
+        <ImageView style="@style/img_arrow"/>
+    </LinearLayout>
 
     <!--<site.zhguixin.dytt.ui.view.WaveView-->
         <!--android:id="@+id/wave_view"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content" />-->
 
-</RelativeLayout>
+</LinearLayout>
