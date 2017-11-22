@@ -2,6 +2,7 @@ package site.zhguixin.dytt.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import site.zhguixin.dytt.entity.MovieInfo;
  * Created by 10200927 on 2017/10/23.
  */
 
-public class NewMovieAdapter extends RecyclerView.Adapter<MovieHolder> {
+public class NewMovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<MovieInfo> mMovies;
     private Context mContext;
@@ -33,22 +34,21 @@ public class NewMovieAdapter extends RecyclerView.Adapter<MovieHolder> {
         mMovies = list;
     }
 
-    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener)
-    {
+    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
 
     @Override
-    public MovieHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         View view = layoutInflater.inflate(R.layout.list_new_movies_cardview, parent, false);
         return new MovieHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final MovieHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         MovieInfo movieInfo = mMovies.get(position);
-        holder.bindMovie(movieInfo);
+        ((MovieHolder)holder).bindMovie(movieInfo);
 
         if(mOnItemClickLitener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {

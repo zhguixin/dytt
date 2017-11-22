@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import site.zhguixin.dytt.R;
+import site.zhguixin.dytt.adapter.FooterViewWrapper;
 import site.zhguixin.dytt.adapter.NewMovieAdapter;
 import site.zhguixin.dytt.entity.MovieInfo;
 import site.zhguixin.dytt.presenter.NewMovieInfoCallback;
@@ -39,6 +40,7 @@ public class MovieFragment extends BaseFragment {
     private List<MovieInfo> mMovieInfos;
     private List<String> mPageList;
     private NewMovieAdapter mAdapter;
+    private FooterViewWrapper footerViewWrapper;
     private RecyclerView mRecycleView;
     private LinearLayoutManager mLinearLayoutManager;
     private Context mContext;
@@ -57,11 +59,12 @@ public class MovieFragment extends BaseFragment {
                 mErrorInfoView.setVisibility(View.VISIBLE);
             } else if (msg.what == 1) {
                 mLoadingBar.setVisibility(View.GONE);
-                mAdapter.notifyDataSetChanged();
+                mRecycleView.setAdapter(footerViewWrapper);
+                footerViewWrapper.notifyDataSetChanged();
             } else if (msg.what == 3) {
                 mLoadingMoreBar.setVisibility(View.GONE);
                 mMoreInfoView.setVisibility(View.GONE);
-                mAdapter.notifyDataSetChanged();
+                footerViewWrapper.notifyDataSetChanged();
             } else if (msg.what == 4) {
                 mLoadingMoreBar.setVisibility(View.GONE);
                 mMoreInfoView.setVisibility(View.GONE);
@@ -125,7 +128,8 @@ public class MovieFragment extends BaseFragment {
         mMovieInfos = new ArrayList<>();
         mPageList = new ArrayList<>();
         mAdapter = new NewMovieAdapter(mContext, mMovieInfos);
-        mRecycleView.setAdapter(mAdapter);
+        footerViewWrapper = new FooterViewWrapper(mContext, mAdapter);
+//        mRecycleView.setAdapter(footerViewWrapper);
 
         mAdapter.setOnItemClickLitener(new NewMovieAdapter.OnItemClickLitener() {
 
@@ -144,7 +148,7 @@ public class MovieFragment extends BaseFragment {
         Log.d(TAG, "onFragmentVisibleChange: isVisible=" + isVisible);
         if (isVisible) {
             //更新界面数据，如果还在加载要显示loadingbar
-            mAdapter.notifyDataSetChanged();
+            footerViewWrapper.notifyDataSetChanged();
 //            if (mRefreshState == STATE_REFRESHING) {
 //                mRefreshListener.onRefreshing();
 //            }
@@ -174,8 +178,8 @@ public class MovieFragment extends BaseFragment {
     }
 
     private void loadMoreData() {
-        mLoadingMoreBar.setVisibility(View.VISIBLE);
-        mMoreInfoView.setVisibility(View.VISIBLE);
+//        mLoadingMoreBar.setVisibility(View.VISIBLE);
+//        mMoreInfoView.setVisibility(View.VISIBLE);
         NewMoviePresenter.getNextPage(mUrl +"/"+ mPageList.get(mPageIndex++), new NewMovieInfoCallback() {
             @Override
             public void onSuccess(List<MovieInfo> info, List<String> pages) {
