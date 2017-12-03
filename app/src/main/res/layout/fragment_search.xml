@@ -6,10 +6,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="site.zhguixin.dytt.ui.SearchFragment">
 
+    <!-- 搜搜框移至Actionbar中,visibility已设置为gone-->
     <EditText
         android:id="@+id/search_input"
         android:layout_marginTop="5dp"
-        android:drawableStart="@drawable/search_icon_2"
+        android:drawableStart="@drawable/search_icon"
         android:hint="@string/search_hint"
         android:singleLine="true"
         android:textStyle="italic"

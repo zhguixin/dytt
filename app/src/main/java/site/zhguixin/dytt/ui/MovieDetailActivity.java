@@ -144,12 +144,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         ProgressListenerContainer.addListener(url, new ProgressListener() {
             @Override
             public void onPreExecute(long contentLength) {
-                Log.d(TAG, "onPreExecute: contentLength=" + contentLength);
+                // 获得图片总大小，暂未开发
+//                Log.d(TAG, "onPreExecute: contentLength=" + contentLength);
             }
 
             @Override
             public void update(long totalBytes, boolean done) {
-                Log.d(TAG, "update: totalBytes=" + totalBytes);
+                // 已下载字节数，更新下载进度，暂未开发
+//                Log.d(TAG, "update: totalBytes=" + totalBytes);
             }
         });
 
