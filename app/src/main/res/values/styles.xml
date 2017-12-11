@@ -12,6 +12,14 @@
         <!--<item name="colorSwitchThumbNormal">#383434</item>-->
         <!--关闭时的轨迹颜色-->
         <!--<item name="android:colorForeground">#ecd502</item>-->
+        <item name="mainBackground">@color/gray</item>
+    </style>
+
+    <style name="NightAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/nightColorPrimary</item>
+        <item name="colorPrimaryDark">@color/nightColorPrimaryDark</item>
+        <item name="colorAccent">@color/nightColorAccent</item>
+        <item name="colorControlActivated">@color/nightColorPrimary</item>
     </style>
 
     <style name="noActionBar" parent="AppTheme">

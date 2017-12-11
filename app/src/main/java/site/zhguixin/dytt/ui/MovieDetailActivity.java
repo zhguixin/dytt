@@ -144,20 +144,21 @@ public class MovieDetailActivity extends AppCompatActivity {
         ProgressListenerContainer.addListener(url, new ProgressListener() {
             @Override
             public void onPreExecute(long contentLength) {
-                // 获得图片总大小，暂未开发
+                // 由于文件总大小未知，无法通过进度条显示
+                // 这一块的内容要详细了解HTTP协议
 //                Log.d(TAG, "onPreExecute: contentLength=" + contentLength);
             }
 
             @Override
             public void update(long totalBytes, boolean done) {
-                // 已下载字节数，更新下载进度，暂未开发
-//                Log.d(TAG, "update: totalBytes=" + totalBytes);
+//                Log.d(TAG, "update: totalBytes=" + totalBytes + " done=" + done);
             }
         });
 
         Glide.with(MainApp.getAppContext())
                 .load(url)
                 .override(1200, 1700)
+                .crossFade()
                 .centerCrop()
                 .placeholder(R.drawable.place_holder)
                 .into(new GlideDrawableImageViewTarget(mAlbumImageView) {

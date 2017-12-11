@@ -1,10 +1,15 @@
 package site.zhguixin.dytt.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -13,6 +18,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import site.zhguixin.dytt.R;
+import site.zhguixin.dytt.utils.Contants;
+import site.zhguixin.dytt.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,13 +31,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Utils.getIsNightTheme(this) ? R.style.NightAppTheme : R.style.AppTheme);
         setContentView(R.layout.activity_main);
         mContext = this;
-        Log.d(TAG, "onCreate: savedInstanceState=" + savedInstanceState);
-        if(savedInstanceState == null) {
-            mController = FragmentController.getInstance(this, R.id.fragment_container);
-            mController.showFragment(0);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayShowHomeEnabled(false);
         }
+        Log.d(TAG, "onCreate: savedInstanceState=" + savedInstanceState);
+        mController = FragmentController.getInstance(this, R.id.fragment_container);
+        mController.showFragment(0);
 
         BottomNavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setSelected(true);

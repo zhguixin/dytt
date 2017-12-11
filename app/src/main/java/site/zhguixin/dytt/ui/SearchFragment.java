@@ -1,14 +1,13 @@
 package site.zhguixin.dytt.ui;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
-import android.content.MutableContextWrapper;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -232,6 +232,7 @@ public class SearchFragment extends Fragment {
         SearchView searchView = (SearchView) item.getActionView();
         // 搜索框默认为展开
         searchView.setIconifiedByDefault(false);
+        searchView.setBackground(getResources().getDrawable(R.drawable.search_view_bg));
         searchView.setQueryHint("请输入要查询电影的关键字");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

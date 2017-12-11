@@ -1,5 +1,7 @@
 package site.zhguixin.dytt.glide;
 
+import android.util.Log;
+
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.data.DataFetcher;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -32,7 +34,9 @@ public class OkHttpFetcher implements DataFetcher<InputStream> {
 
     @Override
     public InputStream loadData(Priority priority) throws Exception {
-        Request.Builder builder = new Request.Builder().url(mUrl.toURL());
+        Request.Builder builder = new Request.Builder()
+                .addHeader("Accept-Encoding", "identity")
+                .url(mUrl.toURL());
         Request request = builder.build();
 
         if(isCanceled) {
@@ -45,6 +49,7 @@ public class OkHttpFetcher implements DataFetcher<InputStream> {
             throw new Exception("Request Failed with code= " + response.code());
         }
 
+        Log.d("zgx", "loadData: " + mResponseBody.contentLength());
         mInputStream = ContentLengthInputStream.obtain(mResponseBody.byteStream(),
                 mResponseBody.contentLength());
         return mInputStream;

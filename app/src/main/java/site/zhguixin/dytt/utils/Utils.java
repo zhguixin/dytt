@@ -2,6 +2,7 @@ package site.zhguixin.dytt.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.renderscript.Allocation;
@@ -38,6 +39,8 @@ public class Utils {
     private static final float BITMAP_SCALE = 0.5f;
     // 图片模糊度
     private static final float BLUR_RADIUS = 25f;
+
+    private static SharedPreferences sp;
 
     public static void main(String[] args) {
 //        praseHtml(html);
@@ -141,5 +144,19 @@ public class Utils {
         // 将数据填充到Allocation中
         tmpOut.copyTo(outputBitmap);
         return outputBitmap;
+    }
+
+    public static void saveTheme(Context context, boolean isNight) {
+        if (sp == null) {
+            sp = context.getSharedPreferences("theme", Context.MODE_PRIVATE);
+        }
+        sp.edit().putBoolean("isNight", isNight).apply();
+    }
+
+    public static boolean getIsNightTheme(Context context) {
+        if (sp == null) {
+            sp = context.getSharedPreferences("theme", Context.MODE_PRIVATE);
+        }
+        return sp.getBoolean("isNight", false);
     }
 }

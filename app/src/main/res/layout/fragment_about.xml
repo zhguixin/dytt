@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/gray"
+    android:background="?attr/mainBackground"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,7 +20,7 @@
     </FrameLayout>
 
     <View style="@style/bg_line"/>
-    <LinearLayout style="@style/single_layout" android:id="@+id/other_func">
+    <LinearLayout style="@style/single_layout" android:id="@+id/other_func" android:visibility="gone">
         <TextView style="@style/usertext" android:text="辅助功能"/>
         <ImageView style="@style/img_arrow"/>
     </LinearLayout>
@@ -28,7 +28,7 @@
     <View style="@style/bg_line"/>
     <LinearLayout style="@style/single_layout" android:id="@+id/clear_cache">
         <TextView style="@style/usertext" android:text="清除缓存"/>
-        <TextView style="@style/textinfo" android:text="0.56M" />
+        <TextView android:id="@+id/cache_view" style="@style/textinfo" android:text="0.56M" />
     </LinearLayout>
 
     <View style="@style/bg_line"/>
@@ -41,6 +41,7 @@
     <LinearLayout style="@style/single_layout">
         <TextView style="@style/usertext" android:text="夜间模式"/>
         <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switch_night_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>

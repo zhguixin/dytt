@@ -1,9 +1,9 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/gray"
+    android:background="?attr/mainBackground"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="site.zhguixin.dytt.ui.SearchFragment">
 
     <!-- 搜搜框移至Actionbar中,visibility已设置为gone-->
@@ -16,13 +16,11 @@
         android:textStyle="italic"
         android:imeOptions="actionSearch"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
     <site.zhguixin.dytt.ui.view.FlowLayout
         android:id="@+id/flow_layout"
-        app:layout_constraintTop_toBottomOf="@id/search_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -33,31 +31,22 @@
         android:layout_height="wrap_content"
         android:elevation="10dp"
         android:progressDrawable="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.712" />
+        android:layout_gravity="center"/>
 
     <TextView
         android:id="@+id/search_no_result"
         android:text="@string/search_no_data"
         android:textStyle="italic|bold"
+        android:layout_gravity="center"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:progressDrawable="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.6" />
+        android:progressDrawable="@color/colorPrimary"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/search_list"
         android:layout_marginTop="7dp"
-        app:layout_constraintTop_toBottomOf="@id/flow_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
