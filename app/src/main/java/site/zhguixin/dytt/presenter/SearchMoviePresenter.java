@@ -2,6 +2,11 @@ package site.zhguixin.dytt.presenter;
 
 import android.util.Log;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,6 +21,7 @@ import site.zhguixin.dytt.utils.Utils;
  */
 
 public class SearchMoviePresenter {
+    private static final String TAG = "SearchMoviePresenter";
 
     private static  String mKeywords;
 
@@ -41,7 +47,7 @@ public class SearchMoviePresenter {
     public static void getNextPage(String url, NewMovieInfoCallback callback) {
         final NewMovieInfoCallback mCallback = callback;
         NetworkPresenter.getInstance()
-                .getHtml(Contants.HOST_URL + url, new IHttpVisitListener() {
+                .getHtml(Contants.SEARCH_HOST + url, new IHttpVisitListener() {
                     @Override
                     public void getHttpResult(String result) {
                         List<MovieInfo> infoList = praseHtml(result);
@@ -89,18 +95,29 @@ public class SearchMoviePresenter {
     }
 
     private static List<String> praseNext(String result) {
-        String start = "<select name='sldd'";
-        String end = "</select></td></div>";
-        String pageTemp = Utils.getMidString(result, start, end);
+        List<String> pageList = new ArrayList<>();
 
-        String page_reg = "<option value='(.*?)'>";
+        Document document = Jsoup.parse(result);
+        Elements elements = document.getElementsByTag("a");
+        for (Element element : elements) {
+            String link = element.attr("href");
+            if (link.contains("keyword") && !pageList.contains(link)) {
+                pageList.add(element.attr("href"));
+            }
+        }
+
+        /*String start = "<form name=\'pagelist\'";
+        String end = "</form>";
+        String pageTemp = Utils.getMidString(result, start, end);
+        Log.d(TAG, "praseNext: pageTemp" + pageTemp);
+
+        String page_reg = "<a href='(.*?)'>";
         Pattern page_pattern = Pattern.compile(page_reg);
         Matcher macther = page_pattern.matcher(pageTemp);
 
-        List<String> pageList = new ArrayList<>();
         while (macther.find()) {
             pageList.add(macther.group(1));
-        }
+        }*/
 
         return pageList;
     }

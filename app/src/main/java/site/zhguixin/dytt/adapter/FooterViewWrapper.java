@@ -45,7 +45,9 @@ public class FooterViewWrapper extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (!mVisible) {
                 footerHolder.mLoadingMoreBar.setVisibility(View.GONE);
                 footerHolder.mMoreInfoView.setVisibility(View.GONE);
-                mVisible = true;
+            } else {
+                footerHolder.mLoadingMoreBar.setVisibility(View.VISIBLE);
+                footerHolder.mMoreInfoView.setVisibility(View.VISIBLE);
             }
         } else {
             mAdapter.onBindViewHolder(holder, position);

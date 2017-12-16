@@ -16,4 +16,9 @@ public class Contants {
     public static final String SEARCH_HOST = "http://s.dydytt.net";
     public static final String SEARCH_URL = "http://s.dydytt.net/plus/search.php?kwtype=0&searchtype=title&keyword=";
     public static final String INDEX = "/index.html";
+
+    public static final int FAILED = 0;
+    public static final int SUCCESS = 1;
+    public static final int MORE_DATA = 2;
+    public static final int NO_MORE = 3;
 }

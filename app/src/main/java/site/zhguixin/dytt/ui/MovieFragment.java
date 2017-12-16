@@ -54,18 +54,18 @@ public class MovieFragment extends BaseFragment {
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            if (msg.what == 0) {
+            if (msg.what == Contants.FAILED) {
                 mLoadingBar.setVisibility(View.GONE);
                 mErrorInfoView.setVisibility(View.VISIBLE);
-            } else if (msg.what == 1) {
+            } else if (msg.what == Contants.SUCCESS) {
                 mLoadingBar.setVisibility(View.GONE);
                 mRecycleView.setAdapter(footerViewWrapper);
                 footerViewWrapper.notifyDataSetChanged();
-            } else if (msg.what == 3) {
+            } else if (msg.what == Contants.MORE_DATA) {
                 mLoadingMoreBar.setVisibility(View.GONE);
                 mMoreInfoView.setVisibility(View.GONE);
                 footerViewWrapper.notifyDataSetChanged();
-            } else if (msg.what == 4) {
+            } else if (msg.what == Contants.NO_MORE) {
                 mLoadingMoreBar.setVisibility(View.GONE);
                 mMoreInfoView.setVisibility(View.GONE);
                 Toast.makeText(mContext, "没有更多影片", Toast.LENGTH_SHORT).show();
@@ -167,12 +167,12 @@ public class MovieFragment extends BaseFragment {
             public void onSuccess(List<MovieInfo> info, List<String> pages) {
                 mMovieInfos.addAll(info);
                 mPageList.addAll(pages);
-                mHandler.sendEmptyMessage(1);
+                mHandler.sendEmptyMessage(Contants.SUCCESS);
             }
 
             @Override
             public void onFailed() {
-                mHandler.sendEmptyMessage(0);
+                mHandler.sendEmptyMessage(Contants.FAILED);
             }
         });
     }
@@ -186,12 +186,12 @@ public class MovieFragment extends BaseFragment {
                 Log.d(TAG, "getNextPage success, new movie size=" + info.size());
                 mMovieInfos.addAll(info);
                 Log.d(TAG, "getNextPage success, all movie size=" + mMovieInfos.size());
-                mHandler.sendEmptyMessage(3);
+                mHandler.sendEmptyMessage(Contants.MORE_DATA);
             }
 
             @Override
             public void onFailed() {
-                mHandler.sendEmptyMessage(4);
+                mHandler.sendEmptyMessage(Contants.NO_MORE);
             }
         });
     }

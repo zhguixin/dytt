@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -33,15 +31,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import site.zhguixin.dytt.R;
+import site.zhguixin.dytt.adapter.FooterViewWrapper;
 import site.zhguixin.dytt.adapter.NewMovieAdapter;
 import site.zhguixin.dytt.entity.MovieInfo;
 import site.zhguixin.dytt.presenter.NewMovieInfoCallback;
-import site.zhguixin.dytt.presenter.NewMoviePresenter;
 import site.zhguixin.dytt.presenter.SearchMoviePresenter;
 import site.zhguixin.dytt.ui.view.FlowLayout;
+import site.zhguixin.dytt.utils.BottomRefreshListener;
 import site.zhguixin.dytt.utils.BottomTrackListener;
 import site.zhguixin.dytt.utils.Contants;
-import site.zhguixin.dytt.utils.TopTrackListener;
 import site.zhguixin.dytt.utils.Utils;
 
 /**
@@ -59,23 +57,27 @@ public class SearchFragment extends Fragment {
     private List<MovieInfo> mMovieInfos;
     private List<String> mPageList;
     private NewMovieAdapter mAdapter;
+    private FooterViewWrapper mFooterViewWrapper;
+    private int mPageIndex = 0;
+    private boolean mIsLoading = false;
 
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            if (msg.what == 0) {
+            if (msg.what == Contants.FAILED) {
                 mLoadingBar.setVisibility(View.GONE);
                 mNoResultView.setVisibility(View.VISIBLE);
-            } else if (msg.what == 1) {
+                mFooterViewWrapper.setVisible(false);
+            } else if (msg.what == Contants.SUCCESS) {
                 mLoadingBar.setVisibility(View.GONE);
-                mAdapter.notifyDataSetChanged();
-            } else if (msg.what == 2) {
-//                mLoadingMoreBar.setVisibility(View.GONE);
-//                mMoreInfoView.setVisibility(View.GONE);
-                mAdapter.notifyDataSetChanged();
-            } else if (msg.what == 3) {
-//                mLoadingMoreBar.setVisibility(View.GONE);
-//                mMoreInfoView.setVisibility(View.GONE);
+                mFooterViewWrapper.setVisible(true);
+                mFooterViewWrapper.notifyDataSetChanged();
+            } else if (msg.what == Contants.MORE_DATA) {
+                mFooterViewWrapper.setVisible(true);
+                mFooterViewWrapper.notifyDataSetChanged();
+            } else if (msg.what == Contants.NO_MORE) {
+                mFooterViewWrapper.setVisible(false);
+                mFooterViewWrapper.notifyDataSetChanged();
                 Toast.makeText(mContext, "没有更多影片", Toast.LENGTH_SHORT).show();
             }
             return true;
@@ -130,14 +132,36 @@ public class SearchFragment extends Fragment {
         });
 
         mSearchListView = view.findViewById(R.id.search_list);
-        mSearchListView.setLayoutManager(new LinearLayoutManager(mContext));
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mContext);
+        mSearchListView.setLayoutManager(mLinearLayoutManager);
         mMovieInfos = new ArrayList<>();
-//        mPageList = new ArrayList<>();
+        mPageList = new ArrayList<>();
         mAdapter = new NewMovieAdapter(mContext, mMovieInfos);
-        mSearchListView.setAdapter(mAdapter);
+        mFooterViewWrapper = new FooterViewWrapper(mContext, mAdapter);
+        mSearchListView.setAdapter(mFooterViewWrapper);
+        mFooterViewWrapper.setVisible(false);
         mSearchListView.addOnScrollListener(new BottomTrackListener(
                 view.getRootView().findViewById(R.id.navigation)));
-//        mSearchListView.addOnScrollListener(new TopTrackListener(mFlowLayout));
+        mSearchListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private int totalItem;
+            private int lastVisible;
+            private int visibleItem;
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItem = mSearchListView.getChildCount();
+                totalItem = mSearchListView.getLayoutManager().getItemCount();
+                lastVisible = ((LinearLayoutManager)mSearchListView.getLayoutManager()).findLastVisibleItemPosition();
+                if (!mIsLoading && lastVisible >= totalItem - 1 && visibleItem > 1) {
+                    mIsLoading = true;
+                    Log.d(TAG, "onScrolled: load more");
+                    loadMoreMovies();
+                }
+//                Log.d(TAG, "onScrolled: totalItem=" + totalItem + " firstVisible=" + firstVisible +
+//                    " visibleItem=" + visibleItem);
+            }
+        });
 
         mAdapter.setOnItemClickLitener(new NewMovieAdapter.OnItemClickLitener() {
 
@@ -198,27 +222,32 @@ public class SearchFragment extends Fragment {
         mLoadingBar.setVisibility(View.VISIBLE);
         mNoResultView.setVisibility(View.GONE);
         mMovieInfos.clear();
-        mAdapter.notifyDataSetChanged();
+        mPageList.clear();
+
+        mFooterViewWrapper.setVisible(false);
+        mFooterViewWrapper.notifyDataSetChanged();
 
         String url = Contants.SEARCH_URL + Utils.encodeKeywod(keywords);
         SearchMoviePresenter.getMovie(url, keywords, new NewMovieInfoCallback() {
 
             @Override
             public void onSuccess(List<MovieInfo> info, List<String> pageList) {
-                Log.d(TAG, "onSuccess: info=" + info.toString() +
-                " pages=" + pageList.toString());
+                Log.d(TAG, "onSuccess: info=" + info.size() +
+                " pages=" + pageList.size());
                 mMovieInfos.addAll(info);
                 if (info.size() > 0) {
-                    mHandler.sendEmptyMessage(1);
+                    mHandler.sendEmptyMessage(Contants.SUCCESS);
                 } else {
-                    mHandler.sendEmptyMessage(0);
+                    mHandler.sendEmptyMessage(Contants.FAILED);
                 }
+                mPageIndex = 0;
+                mPageList.addAll(pageList);
             }
 
             @Override
             public void onFailed() {
                 Log.d(TAG, "onFailed: search failed");
-                mHandler.sendEmptyMessage(0);
+                mHandler.sendEmptyMessage(Contants.FAILED);
             }
         });
     }
@@ -249,4 +278,29 @@ public class SearchFragment extends Fragment {
         });
     }
 
+    private void loadMoreMovies() {
+        mIsLoading = false;
+        if (mPageIndex >= mPageList.size()) {
+            mHandler.sendEmptyMessage(Contants.NO_MORE);
+            return;
+        }
+        SearchMoviePresenter.getNextPage(mPageList.get(mPageIndex), new NewMovieInfoCallback() {
+            @Override
+            public void onSuccess(List<MovieInfo> info, List<String> pageList) {
+                mMovieInfos.addAll(info);
+                mPageIndex++;
+                if (info.size() > 0) {
+                    mHandler.sendEmptyMessage(Contants.MORE_DATA);
+                } else {
+                    mHandler.sendEmptyMessage(Contants.FAILED);
+                }
+            }
+
+            @Override
+            public void onFailed() {
+                Log.d(TAG, "onFailed: get more movies failed");
+                mHandler.sendEmptyMessage(Contants.FAILED);
+            }
+        });
+    }
 }
